@@ -19,7 +19,9 @@ RUN pip3 install    jupyter \
                     torchvision \
                     torchaudio \
                     pyrealsense2 \
-                    ultralytics
+                    ultralytics 
+# Install ultralytics before or after pytorch??
+
 
 #ENTRYPOINT ["/bin/bash"]
 WORKDIR /root/aifr/
