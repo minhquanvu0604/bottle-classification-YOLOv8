@@ -1,11 +1,12 @@
 xhost +local:root
 
-docker run  -itd \
+docker run  -it \
+            --detach \
             --name aifr_container \
             --gpus all \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v ./:/root/aifr \
+            -v ./:/root/aifr/bottle-classification-YOLOv8 \
             aifr_img
 
 # docker run  -itd \

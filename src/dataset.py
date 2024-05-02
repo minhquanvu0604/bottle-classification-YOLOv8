@@ -3,11 +3,10 @@ import logging
 
 from torch.utils.data import Dataset, DataLoader
 from torchvision.io import read_image
-from torchvision import transforms
 import pandas as pd
-
 import matplotlib.pyplot as plt
 
+from transforms import basic_transform
 
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -46,21 +45,19 @@ class ClassDataset(Dataset):
 
 
 def get_data_loader(annotations_file, img_dir, batch_size=1):
+    
+    # Based on how data is structured as train and val directories
     labels_df = pd.read_csv(annotations_file)
     train_df = labels_df[labels_df['dataset'] == 'train']
     val_df = labels_df[labels_df['dataset'] == 'val']
     
-    transform = transforms.Compose([
-        transforms.Resize((256, 256)),
-        transforms.Lambda(lambda x: x / 255.0)
-    ])
-    transform = None
+    train_transform = basic_transform
+    test_transform = basic_transform
 
     train_path = os.path.join(img_dir, 'train')
     val_path = os.path.join(img_dir, 'val')
-
-    train_dataset = ClassDataset(dataframe=train_df, img_dir=train_path, transform=transform)
-    val_dataset = ClassDataset(dataframe=val_df, img_dir=val_path, transform=transform)
+    train_dataset = ClassDataset(dataframe=train_df, img_dir=train_path, transform=train_transform)
+    val_dataset = ClassDataset(dataframe=val_df, img_dir=val_path, transform=test_transform)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
