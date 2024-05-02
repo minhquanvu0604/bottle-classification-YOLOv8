@@ -1,6 +1,9 @@
+xhost +local:root
+
 docker run  -itd \
             --name aifr_container \
             --gpus all \
+            -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v ./:/root/aifr \
             aifr_img
