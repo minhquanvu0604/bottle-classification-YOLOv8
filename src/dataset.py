@@ -6,6 +6,8 @@ from torchvision.io import read_image
 from torchvision import transforms
 import pandas as pd
 
+import matplotlib.pyplot as plt
+
 class ClassDataset(Dataset):
     def __init__(self, dataframe, img_dir, transform=None, target_transform=None):
         self.img_labels = dataframe
@@ -59,10 +61,27 @@ def get_data_loader(annotations_file, img_dir, batch_size=2) -> tuple[DataLoader
     return train_loader, val_loader
 
 
+def display_sample(data_loader : DataLoader):
+    features, labels = next(iter(data_loader))
+    print(f"Feature batch shape: {features.size()}")
+    print(f"Labels batch shape: {labels.size()}")
+    # In the case of image tensors like [channels, height, width] coming directly from a DataLoader, 
+    # using squeeze() generally doesn't change the tensor since there shouldn't be any singleton dimensions. 
+    # However, if the tensor has a shape like [1, channels, height, width] or [channels, height, width, 1], 
+    # then squeeze() would reduce it to [channels, height, width].
+    img = features[0].squeeze() 
+    label = labels[0]
+    plt.imshow(img, cmap="gray")
+    plt.show()
+    print(f"Label: {label}")
+
+
 if __name__ == "__main__":
-
-    import matplotlib.pyplot as plt
-
+    label_path = os.path.join("..", "data", "labels.csv")
+    data_path = os.path.join("..", "data")
+    train_loader, val_loader = get_data_loader(annotations_file=label_path, img_dir=data_path)
+    
+    display_sample(train_loader)
     
     
     
