@@ -6,7 +6,7 @@ from torchvision.io import read_image
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from transforms import basic_transform
+import transforms
 
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -51,13 +51,14 @@ def get_data_loader(annotations_file, img_dir, batch_size=1):
     train_df = labels_df[labels_df['dataset'] == 'train']
     val_df = labels_df[labels_df['dataset'] == 'val']
     
-    train_transform = basic_transform
-    test_transform = basic_transform
+    # Replace transforms here
+    train_transform = transforms.train_transforms_gpt
+    val_transform = transforms.simple_transform
 
     train_path = os.path.join(img_dir, 'train')
     val_path = os.path.join(img_dir, 'val')
     train_dataset = ClassDataset(dataframe=train_df, img_dir=train_path, transform=train_transform)
-    val_dataset = ClassDataset(dataframe=val_df, img_dir=val_path, transform=test_transform)
+    val_dataset = ClassDataset(dataframe=val_df, img_dir=val_path, transform=val_transform)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
@@ -65,16 +66,17 @@ def get_data_loader(annotations_file, img_dir, batch_size=1):
     return train_loader, val_loader
 
 
-def display_sample(data_loader : DataLoader):
+def display_dataloader_sample(data_loader : DataLoader):
     features, labels = next(iter(data_loader))
 
     print(f"Feature batch shape: {features.size()}")
     print(f"Labels batch shape: {labels.size()}")
+    print(f"Labels: {labels.item()}")
+
     # In the case of image tensors like [channels, height, width] coming directly from a DataLoader, 
     # using squeeze() generally doesn't change the tensor since there shouldn't be any singleton dimensions. 
     # However, if the tensor has a shape like [1, channels, height, width] or [channels, height, width, 1], 
     # then squeeze() would reduce it to [channels, height, width].
-    
     img = features[0].squeeze() 
     img = img.permute(1, 2, 0)
     label = labels[0]
@@ -87,9 +89,10 @@ if __name__ == "__main__":
 
     label_path = os.path.join("..", "data", "labels.csv")
     data_path = os.path.join("..", "data")
+
     train_loader, val_loader = get_data_loader(annotations_file=label_path, img_dir=data_path)
     
-    display_sample(train_loader)
+    display_dataloader_sample(train_loader)
     
     
     
