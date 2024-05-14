@@ -11,7 +11,7 @@ import transforms
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-class ClassDataset(Dataset):
+class ClassificationDataset(Dataset):
     def __init__(self, dataframe, img_dir, transform=None, target_transform=None):
         self.img_labels = dataframe
         self.img_dir = img_dir
@@ -57,8 +57,8 @@ def get_data_loader(annotations_file, img_dir, batch_size=1):
 
     train_path = os.path.join(img_dir, 'train')
     val_path = os.path.join(img_dir, 'val')
-    train_dataset = ClassDataset(dataframe=train_df, img_dir=train_path, transform=train_transform)
-    val_dataset = ClassDataset(dataframe=val_df, img_dir=val_path, transform=val_transform)
+    train_dataset = ClassificationDataset(dataframe=train_df, img_dir=train_path, transform=train_transform)
+    val_dataset = ClassificationDataset(dataframe=val_df, img_dir=val_path, transform=val_transform)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
