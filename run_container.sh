@@ -2,6 +2,8 @@ xhost +local:root
 
 docker run  -it \
             --detach \
+            --network host \
+            --ipc=host \
             --name aifr_container \
             --gpus all \
             -e DISPLAY=$DISPLAY \

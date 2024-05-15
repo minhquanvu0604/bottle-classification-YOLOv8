@@ -3,6 +3,7 @@
 docker run  -it `
             --detach `
             --network host `
+            --ipc=host `
             --name aifr_container `
             --gpus all `
             -v ".:/root/aifr/bottle-classification-YOLOv8" `

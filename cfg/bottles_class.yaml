@@ -1,0 +1,13 @@
+# Template from https://docs.ultralytics.com/yolov5/tutorials/train_custom_data/#13-prepare-dataset-for-yolov5
+# NOT USING THIS RIGHT NOW!
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /root/aifr/bottle-classification-YOLOv8/data  # dataset root dir
+train: train  # train images (relative to 'path') 
+val: val  # val images (relative to 'path') 
+test:  # test images (optional)
+
+names:
+  0: cro
+  1: hen
+  2: pin
