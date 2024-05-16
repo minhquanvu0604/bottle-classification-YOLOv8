@@ -6,7 +6,7 @@ from torchvision.io import read_image
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import transforms
+from ..src.transforms import *
 
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
